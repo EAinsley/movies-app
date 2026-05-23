@@ -1,23 +1,20 @@
-import React, { useEffect, useState } from 'react'
-import Navbar from '../components/Navbar'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import Banner from '../components/Banner'
-import { movieApi } from '../constants/axios'
-import { movieRequests } from '../constants/requests'
+import Navbar from '../components/Navbar'
 import Row from '../components/Row'
+import { getMovies, getMoviesStatus, selectAllMovies } from '../slices/movieSlice'
 
 const HomePage = () => {
-  const [movies, setMovies] = useState({})
+  const dispatch = useDispatch()
+  const status = useSelector(getMoviesStatus)
+  const movies = useSelector(selectAllMovies)
 
+  console.log(movies)
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const request = await movieApi.get(movieRequests.fetchAllMovies)
-        setMovies(request.data.movies)
-      } catch (error) {
-        console.log(error)
-      }
+    if(status === "idle"){
+      dispatch(getMovies())
     }
-    fetchData()
   }, []);
 
   return (
